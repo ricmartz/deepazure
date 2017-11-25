@@ -128,6 +128,28 @@ table_service.insert_entity('itemstable', clothing)
 print('Created entry for Jeans...\n')
 time.sleep(1)
 
+coffee = Entity()
+coffee.PartitionKey = 'coffeestore'
+coffee.RowKey = '007'
+coffee.brand = 'Java Bros'
+coffee.flavor = 'Hazelnut'
+coffee.sizeoz = 8
+coffee.pricecup = 1.50
+table_service.insert_entity('itemstable', coffee)
+print('Created entry for a Coffee Java Bros...\n')
+time.sleep(1)
+
+coffee = Entity()
+coffee.PartitionKey = 'coffeestore'
+coffee.RowKey = '008'
+coffee.brand = 'Percolicious'
+coffee.flavor = 'Chocolate Truffle'
+coffee.sizeoz = 8
+coffee.pricecup = 2.00
+table_service.insert_entity('itemstable', coffee)
+print('Created entry for a Sweater...\n')
+time.sleep(1)
+
 ###
 # Use the Azure Storage Storage SDK for Python to query for entities in our Table
 ###
@@ -139,15 +161,26 @@ raw_input('Press Enter to continue...')
 items = table_service.query_entities('itemstable', filter="PartitionKey eq 'carmenu'", select='make,model,year,color,price')
 for item in items:
     print('make: ' + item.make)
-	print('model: ' + item.model)
-	print('year: ' + str(item.year))
-	print('color: ' + item.color)
+    print('model: ' + item.model)
+    print('year: ' + str(item.year))
+    print('color: ' + item.color)
     print('price: ' + str(item.price) + '\n')
 
-items = table_service.query_entities('itemstable', filter="PartitionKey eq 'clothingstore'", select='description,price')
+# items = table_service.query_entities('itemstable', filter="PartitionKey eq 'clothingstore'", select='description,price')
+# for item in items:
+#    print('Name: ' + item.description)
+#    print('Price: ' + str(item.price) + '\n')
+
+# In this query, you define the partition key to search within, and then which properties to retrieve
+# Structuring queries like this improves performance as your application scales up and keeps the queries efficient
+items = table_service.query_entities('itemstable', filter="PartitionKey eq 'coffeestore'", select='brand, flavor, sizeoz, pricecup')
 for item in items:
-    print('Name: ' + item.description)
-    print('Price: ' + str(item.price) + '\n')
+    print('brand: ' + item.brand)
+    print('flavor: ' + item.flavor)
+    print('sizeoz: ' + str(item.sizeoz))
+    print('pricecup: ' + str(item.pricecup))
+    print('pricecup: ' + str(item.pricecup) + '\n')
+
 
 time.sleep(1)
 
